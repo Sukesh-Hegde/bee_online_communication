@@ -1,5 +1,6 @@
-import React from 'react'
+import React, { useContext } from 'react'
 import classNames from 'classnames'
+import { useState } from 'react'
 
 import {
   CAvatar,
@@ -10,6 +11,13 @@ import {
   CCardFooter,
   CCardHeader,
   CCol,
+  CForm,
+  CFormInput,
+  CFormLabel,
+  CModal,
+  CModalBody,
+  CModalFooter,
+  CModalHeader,
   CProgress,
   CRow,
   CTable,
@@ -21,23 +29,14 @@ import {
 } from '@coreui/react'
 import CIcon from '@coreui/icons-react'
 import {
-  cibCcAmex,
-  cibCcApplePay,
   cibCcMastercard,
-  cibCcPaypal,
-  cibCcStripe,
   cibCcVisa,
   cibGoogle,
   cibFacebook,
-  cibLinkedin,
-  cifBr,
-  cifEs,
-  cifFr,
-  cifIn,
-  cifPl,
-  cifUs,
   cibTwitter,
-  cilCloudDownload,
+  cibLinkedin,
+  cifUs,
+  cifBr,
   cilPeople,
   cilUser,
   cilUserFemale,
@@ -45,14 +44,11 @@ import {
 
 import avatar1 from 'src/assets/images/avatars/1.jpg'
 import avatar2 from 'src/assets/images/avatars/2.jpg'
-import avatar3 from 'src/assets/images/avatars/3.jpg'
-import avatar4 from 'src/assets/images/avatars/4.jpg'
-import avatar5 from 'src/assets/images/avatars/5.jpg'
-import avatar6 from 'src/assets/images/avatars/6.jpg'
 
 import WidgetsBrand from '../widgets/WidgetsBrand'
 import WidgetsDropdown from '../widgets/WidgetsDropdown'
 import MainChart from './MainChart'
+import UserContext from '../../context/notes/userContext'
 
 const Dashboard = () => {
   const progressExample = [
@@ -84,98 +80,99 @@ const Dashboard = () => {
     { title: 'Twitter', icon: cibTwitter, percent: 11, value: '37,564' },
     { title: 'LinkedIn', icon: cibLinkedin, percent: 8, value: '27,319' },
   ]
+  const context = useContext(UserContext)
 
-  const tableExample = [
+  const { addUser } = context
+
+  const [users, setUsers] = useState([
     {
       avatar: { src: avatar1, status: 'success' },
-      user: {
-        name: 'Yiorgos Avraamu',
-        new: true,
-        registered: 'Jan 1, 2023',
-      },
+      user: { name: 'Yiorgos Avraamu', new: true, registered: 'Jan 1, 2023' },
       country: { name: 'USA', flag: cifUs },
-      usage: {
-        value: 50,
-        period: 'Jun 11, 2023 - Jul 10, 2023',
-        color: 'success',
-      },
+      usage: { value: 50, period: 'Jun 11, 2023 - Jul 10, 2023', color: 'success' },
       payment: { name: 'Mastercard', icon: cibCcMastercard },
       activity: '10 sec ago',
     },
     {
       avatar: { src: avatar2, status: 'danger' },
-      user: {
-        name: 'Avram Tarasios',
-        new: false,
-        registered: 'Jan 1, 2023',
-      },
+      user: { name: 'Avram Tarasios', new: false, registered: 'Jan 1, 2023' },
       country: { name: 'Brazil', flag: cifBr },
-      usage: {
-        value: 22,
-        period: 'Jun 11, 2023 - Jul 10, 2023',
-        color: 'info',
-      },
+      usage: { value: 22, period: 'Jun 11, 2023 - Jul 10, 2023', color: 'info' },
       payment: { name: 'Visa', icon: cibCcVisa },
       activity: '5 minutes ago',
     },
-    {
-      avatar: { src: avatar3, status: 'warning' },
-      user: { name: 'Quintin Ed', new: true, registered: 'Jan 1, 2023' },
-      country: { name: 'India', flag: cifIn },
+  ])
+
+  const [modalVisible, setModalVisible] = useState(false)
+  const [editIndex, setEditIndex] = useState(null)
+  const [newUser, setNewUser] = useState({
+    name: '',
+    registered: '',
+    country: '',
+    usage: '',
+    payment: '',
+    activity: '',
+  })
+
+  const handleInputChange = (e) => {
+    setNewUser({ ...newUser, [e.target.name]: e.target.value })
+  }
+
+  // Open the modal to add a new user
+  const handleAddUser = () => {
+    const userObject = {
+      avatar: { src: avatar2, status: 'success' },
+      user: { name: newUser.name, new: true, registered: newUser.registered },
+      country: { name: newUser.country, flag: cifUs },
       usage: {
-        value: 74,
-        period: 'Jun 11, 2023 - Jul 10, 2023',
-        color: 'warning',
-      },
-      payment: { name: 'Stripe', icon: cibCcStripe },
-      activity: '1 hour ago',
-    },
-    {
-      avatar: { src: avatar4, status: 'secondary' },
-      user: { name: 'Enéas Kwadwo', new: true, registered: 'Jan 1, 2023' },
-      country: { name: 'France', flag: cifFr },
-      usage: {
-        value: 98,
-        period: 'Jun 11, 2023 - Jul 10, 2023',
-        color: 'danger',
-      },
-      payment: { name: 'PayPal', icon: cibCcPaypal },
-      activity: 'Last month',
-    },
-    {
-      avatar: { src: avatar5, status: 'success' },
-      user: {
-        name: 'Agapetus Tadeáš',
-        new: true,
-        registered: 'Jan 1, 2023',
-      },
-      country: { name: 'Spain', flag: cifEs },
-      usage: {
-        value: 22,
-        period: 'Jun 11, 2023 - Jul 10, 2023',
-        color: 'primary',
-      },
-      payment: { name: 'Google Wallet', icon: cibCcApplePay },
-      activity: 'Last week',
-    },
-    {
-      avatar: { src: avatar6, status: 'danger' },
-      user: {
-        name: 'Friderik Dávid',
-        new: true,
-        registered: 'Jan 1, 2023',
-      },
-      country: { name: 'Poland', flag: cifPl },
-      usage: {
-        value: 43,
+        value: parseInt(newUser.usage, 10),
         period: 'Jun 11, 2023 - Jul 10, 2023',
         color: 'success',
       },
-      payment: { name: 'Amex', icon: cibCcAmex },
-      activity: 'Last week',
-    },
-    
-  ]
+      payment: { name: newUser.payment, icon: cibCcMastercard },
+      activity: newUser.activity,
+    }
+
+    if (editIndex !== null) {
+      const updatedUsers = users.map((user, index) => (index === editIndex ? userObject : user))
+      setUsers(updatedUsers)
+    } else {
+      setUsers([...users, userObject])
+      addUser(
+        users.registered,
+        users.name,
+        users.country,
+        users.usage,
+        users.payment,
+        users.activity,
+      )
+    }
+
+    setModalVisible(false)
+    setNewUser({ name: '', registered: '', country: '', usage: '', payment: '', activity: '' })
+    setEditIndex(null)
+  }
+
+  // Open the modal to edit a user
+  const handleEditUser = (index) => {
+    setEditIndex(index)
+    const user = users[index]
+    setNewUser({
+      name: user.user.name,
+      registered: user.user.registered,
+      country: user.country.name,
+      usage: user.usage.value,
+      payment: user.payment.name,
+      activity: user.activity,
+    })
+    setModalVisible(true)
+  }
+
+  // Delete a user from the list
+  const handleDeleteUser = (index) => {
+    const updatedUsers = users.filter((_, i) => i !== index)
+    setUsers(updatedUsers)
+  }
 
   return (
     <>
@@ -191,20 +188,8 @@ const Dashboard = () => {
             </CCol>
             <CCol sm={7} className="d-none d-md-block">
               <CButton color="primary" className="float-end">
-                <CIcon icon={cilCloudDownload} />
+                <CIcon icon={cilPeople} />
               </CButton>
-              <CButtonGroup className="float-end me-3">
-                {['Day', 'Month', 'Year'].map((value) => (
-                  <CButton
-                    color="outline-secondary"
-                    key={value}
-                    className="mx-0"
-                    active={value === 'Month'}
-                  >
-                    {value}
-                  </CButton>
-                ))}
-              </CButtonGroup>
             </CCol>
           </CRow>
           <MainChart />
@@ -238,7 +223,7 @@ const Dashboard = () => {
       <CRow>
         <CCol xs>
           <CCard className="mb-4">
-            <CCardHeader>Traffic {' & '} Sales</CCardHeader>
+            <CCardHeader>Traffic & Sales</CCardHeader>
             <CCardBody>
               <CRow>
                 <CCol xs={12} md={6} xl={6}>
@@ -272,23 +257,7 @@ const Dashboard = () => {
                   ))}
                 </CCol>
                 <CCol xs={12} md={6} xl={6}>
-                  <CRow>
-                    <CCol xs={6}>
-                      <div className="border-start border-start-4 border-start-warning py-1 px-3 mb-3">
-                        <div className="text-body-secondary text-truncate small">Pageviews</div>
-                        <div className="fs-5 fw-semibold">78,623</div>
-                      </div>
-                    </CCol>
-                    <CCol xs={6}>
-                      <div className="border-start border-start-4 border-start-success py-1 px-3 mb-3">
-                        <div className="text-body-secondary text-truncate small">Organic</div>
-                        <div className="fs-5 fw-semibold">49,123</div>
-                      </div>
-                    </CCol>
-                  </CRow>
-
                   <hr className="mt-0" />
-
                   {progressGroupExample2.map((item, index) => (
                     <div className="progress-group mb-4" key={index}>
                       <div className="progress-group-header">
@@ -301,17 +270,14 @@ const Dashboard = () => {
                       </div>
                     </div>
                   ))}
-
-                  <div className="mb-5"></div>
-
+                  <hr className="mt-0" />
                   {progressGroupExample3.map((item, index) => (
                     <div className="progress-group" key={index}>
                       <div className="progress-group-header">
                         <CIcon className="me-2" icon={item.icon} size="lg" />
                         <span>{item.title}</span>
                         <span className="ms-auto fw-semibold">
-                          {item.value}{' '}
-                          <span className="text-body-secondary small">({item.percent}%)</span>
+                          {item.value} ({item.percent}%)
                         </span>
                       </div>
                       <div className="progress-group-bars">
@@ -321,57 +287,142 @@ const Dashboard = () => {
                   ))}
                 </CCol>
               </CRow>
-
               <br />
 
+              <CButton color="primary" onClick={() => setModalVisible(true)}>
+                Add New User
+              </CButton>
+              <CModal visible={modalVisible} onClose={() => setModalVisible(false)}>
+                <CModalHeader closeButton>
+                  {editIndex !== null ? 'Update User' : 'Add New User'}
+                </CModalHeader>
+                <CModalBody>
+                  <CForm>
+                    <div className="mb-3">
+                      <CFormLabel>Name</CFormLabel>
+                      <CFormInput
+                        type="text"
+                        name="name"
+                        value={newUser.name}
+                        onChange={handleInputChange}
+                      />
+                    </div>
+                    <div className="mb-3">
+                      <CFormLabel>Registered Date</CFormLabel>
+                      <CFormInput
+                        type="text"
+                        name="registered"
+                        value={newUser.registered}
+                        onChange={handleInputChange}
+                      />
+                    </div>
+                    <div className="mb-3">
+                      <CFormLabel>Country</CFormLabel>
+                      <CFormInput
+                        type="text"
+                        name="country"
+                        value={newUser.country}
+                        onChange={handleInputChange}
+                      />
+                    </div>
+                    <div className="mb-3">
+                      <CFormLabel>Usage (%)</CFormLabel>
+                      <CFormInput
+                        type="number"
+                        name="usage"
+                        value={newUser.usage}
+                        onChange={handleInputChange}
+                      />
+                    </div>
+                    <div className="mb-3">
+                      <CFormLabel>Payment Method</CFormLabel>
+                      <CFormInput
+                        type="text"
+                        name="payment"
+                        value={newUser.payment}
+                        onChange={handleInputChange}
+                      />
+                    </div>
+                    <div className="mb-3">
+                      <CFormLabel>Activity</CFormLabel>
+                      <CFormInput
+                        type="text"
+                        name="activity"
+                        value={newUser.activity}
+                        onChange={handleInputChange}
+                      />
+                    </div>
+                  </CForm>
+                </CModalBody>
+                <CModalFooter>
+                  <CButton color="secondary" onClick={() => setModalVisible(false)}>
+                    Cancel
+                  </CButton>
+                  <CButton color="primary" onClick={handleAddUser}>
+                    {editIndex !== null ? 'Update User' : 'Add User'}
+                  </CButton>
+                </CModalFooter>
+              </CModal>
               <CTable align="middle" className="mb-0 border" hover responsive>
-                <CTableHead className="text-nowrap">
+                <CTableHead color="light">
                   <CTableRow>
-                    <CTableHeaderCell className="bg-body-tertiary text-center">
+                    <CTableHeaderCell className="text-center">
                       <CIcon icon={cilPeople} />
                     </CTableHeaderCell>
-                    <CTableHeaderCell className="bg-body-tertiary">User</CTableHeaderCell>
-                    <CTableHeaderCell className="bg-body-tertiary text-center">
-                      Country
-                    </CTableHeaderCell>
-                    <CTableHeaderCell className="bg-body-tertiary">Usage</CTableHeaderCell>
-                    <CTableHeaderCell className="bg-body-tertiary text-center">
-                      Payment Method
-                    </CTableHeaderCell>
-                    <CTableHeaderCell className="bg-body-tertiary">Activity</CTableHeaderCell>
+                    <CTableHeaderCell>User</CTableHeaderCell>
+                    <CTableHeaderCell className="text-center">Country</CTableHeaderCell>
+                    <CTableHeaderCell>Usage</CTableHeaderCell>
+                    <CTableHeaderCell className="text-center">Payment Method</CTableHeaderCell>
+                    <CTableHeaderCell>Activity</CTableHeaderCell>
+                    <CTableHeaderCell>Actions</CTableHeaderCell>
                   </CTableRow>
                 </CTableHead>
                 <CTableBody>
-                  {tableExample.map((item, index) => (
-                    <CTableRow v-for="item in tableItems" key={index}>
+                  {users.map((user, index) => (
+                    <CTableRow key={index}>
                       <CTableDataCell className="text-center">
-                        <CAvatar size="md" src={item.avatar.src} status={item.avatar.status} />
+                        <CAvatar size="md" src={user.avatar.src} status={user.avatar.status} />
                       </CTableDataCell>
                       <CTableDataCell>
-                        <div>{item.user.name}</div>
-                        <div className="small text-body-secondary text-nowrap">
-                          <span>{item.user.new ? 'New' : 'Recurring'}</span> | Registered:{' '}
-                          {item.user.registered}
+                        <div>{user.user.name}</div>
+                        <div className="small text-body-secondary">
+                          <span>{user.user.new ? 'New' : 'Returning'}</span> | Registered:{' '}
+                          {user.user.registered}
                         </div>
                       </CTableDataCell>
                       <CTableDataCell className="text-center">
-                        <CIcon size="xl" icon={item.country.flag} title={item.country.name} />
+                        <CIcon size="xl" icon={user.country.flag} title={user.country.name} />
                       </CTableDataCell>
                       <CTableDataCell>
-                        <div className="d-flex justify-content-between text-nowrap">
-                          <div className="fw-semibold">{item.usage.value}%</div>
-                          <div className="ms-3">
-                            <small className="text-body-secondary">{item.usage.period}</small>
+                        <div className="clearfix">
+                          <div className="float-start">
+                            <strong>{user.usage.value}%</strong>
+                          </div>
+                          <div className="float-end">
+                            <small className="text-body-secondary">{user.usage.period}</small>
                           </div>
                         </div>
-                        <CProgress thin color={item.usage.color} value={item.usage.value} />
+                        <CProgress thin color={user.usage.color} value={user.usage.value} />
                       </CTableDataCell>
                       <CTableDataCell className="text-center">
-                        <CIcon size="xl" icon={item.payment.icon} />
+                        <CIcon size="xl" icon={user.payment.icon} />
                       </CTableDataCell>
                       <CTableDataCell>
-                        <div className="small text-body-secondary text-nowrap">Last login</div>
-                        <div className="fw-semibold text-nowrap">{item.activity}</div>
+                        <div className="small text-body-secondary">Last login</div>
+                        <strong>{user.activity}</strong>
+                      </CTableDataCell>
+                      <CTableDataCell>
+                        <CButton color="info" size="sm" onClick={() => handleEditUser(index)}>
+                          Update
+                        </CButton>
+                        <CButton
+                          color="danger"
+                          size="sm"
+                          className="ms-2"
+                          onClick={() => handleDeleteUser(index)}
+                        >
+                          Delete
+                        </CButton>
                       </CTableDataCell>
                     </CTableRow>
                   ))}
