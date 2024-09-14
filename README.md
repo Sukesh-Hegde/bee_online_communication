@@ -15,9 +15,9 @@ This project is a User Management System that allows you to add, update, and del
 
 ![Screenshot 2024-09-14 at 7 11 28 PM](https://github.com/user-attachments/assets/8b6c398c-c2d5-40de-b74e-44fcd91d2448)
 
+![Screenshot 2024-09-14 at 7 11 42 PM](https://github.com/user-attachments/assets/470d18db-2645-4165-bb55-f4fce15fe738)
 
 
-![Screenshot 2024-09-14 at 7 11 42 PM](https://github.com/user-attachments/assets/50aa7f08-b2ee-47e7-bfa9-f999b6aeb55a)
 
 ## Features
 Add new users with information such as avatar, name, country, usage statistics, and payment method.
