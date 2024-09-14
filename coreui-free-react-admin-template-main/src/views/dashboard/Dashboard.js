@@ -174,6 +174,7 @@ const Dashboard = () => {
       payment: { name: 'Amex', icon: cibCcAmex },
       activity: 'Last week',
     },
+    
   ]
 
   return (
