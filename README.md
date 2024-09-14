@@ -9,7 +9,7 @@ This project is a User Management System that allows you to add, update, and del
 
 
 
-![Screenshot 2024-09-14 at 7 10 56 PM](https://github.com/user-attachments/assets/190dac62-4150-4ebb-820c-38c22470c86a
+![Screenshot 2024-09-14 at 7 10 56 PM](https://github.com/user-attachments/assets/190dac62-4150-4ebb-820c-38c22470c86a)
 
 
 
